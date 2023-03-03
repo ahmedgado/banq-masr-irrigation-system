@@ -46,7 +46,7 @@ public class MessageService {
     private void checkIfDeviceRegistered(String imei)
     {
         Object object = restTemplate.
-                getForObject("http://core-service/device/"+imei, Object.class);
+                getForObject("http://core-service/device/search/"+imei, Object.class);
         if(object.equals(true))
         {
             System.out.println("Founded" + object);

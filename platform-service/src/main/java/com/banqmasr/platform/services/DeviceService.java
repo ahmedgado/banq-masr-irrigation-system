@@ -2,12 +2,15 @@ package com.banqmasr.platform.services;
 
 import com.banqmasr.platform.entities.Device;
 import com.banqmasr.platform.entities.Plot;
+import com.banqmasr.platform.entities.Region;
 import com.banqmasr.platform.exceptions.BusinessException;
 import com.banqmasr.platform.models.DeviceCommand;
 import com.banqmasr.platform.models.DeviceModel;
 import com.banqmasr.platform.models.DeviceReqMsg;
 import com.banqmasr.platform.repo.DeviceRepo;
 import com.banqmasr.platform.repo.PlotRepo;
+import org.modelmapper.AbstractConverter;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,9 +68,41 @@ public class DeviceService {
 
     }
 
+    private void validateDevice (DeviceModel deviceModel) throws BusinessException
+    {
+        if (deviceModel.getImei() == null || deviceModel.getImei().isEmpty())
+            throw new BusinessException("Imei No. is mandatory");
+        if (deviceModel.getModel() == null || deviceModel.getModel().isEmpty())
+            throw new BusinessException("Model is mandatory");
+        if (deviceModel.getWaterLevelPerMin() == 0)
+            throw new BusinessException("Water/Min is mandatory");
+    }
+
+    private Device convertFromModelToEntity (DeviceModel deviceModel)
+    {
+        Converter<String, Region> regionConverter = new AbstractConverter<String, Region>() {
+            protected Region convert(String source) {
+                if(source !=null )
+                {
+                    Region region = new Region();
+                    region.setName(source);
+                    return region;
+
+                } else
+                    return null;
+            }
+        };
+
+        modelMapper.addConverter(regionConverter);
+
+        Device device = modelMapper.map(deviceModel,Device.class);
+        return device;
+
+    }
     public Device saveDevice (DeviceModel deviceModel)
     {
-       Device device = modelMapper.map(deviceModel,Device.class);
+        validateDevice(deviceModel);
+       Device device = convertFromModelToEntity(deviceModel);
        if(device.getId() == null)
        device.setId(UUID.randomUUID());
        deviceRepo.save(device);
@@ -75,6 +110,6 @@ public class DeviceService {
     }
 
     public List<Device> listAll() {
-        return deviceRepo.findAll();
+        return (List<Device>) deviceRepo.findAll();
     }
 }

@@ -26,6 +26,7 @@ public class PlatformServiceApplication {
                 return source !=null ? UUID.fromString(source) : null;
             }
         };
+
         modelToEntityDtoMapper.addConverter(uuidConverter);
         return modelToEntityDtoMapper;
     }
