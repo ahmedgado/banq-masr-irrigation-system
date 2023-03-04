@@ -11,4 +11,13 @@ public class Zone {
     private UUID id;
     @Column
     private String name;
+
+    public Zone(String name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+    }
+
+    public Zone() {
+
+    }
 }

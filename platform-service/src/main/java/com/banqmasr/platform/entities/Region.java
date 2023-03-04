@@ -15,4 +15,14 @@ public class Region {
     @ManyToOne
     @JoinColumn
     private Zone zone;
+
+    public Region(String name, Zone zone) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.zone = zone;
+    }
+
+    public Region() {
+
+    }
 }

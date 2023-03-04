@@ -6,6 +6,7 @@ import com.banqmasr.platform.entities.Region;
 import com.banqmasr.platform.exceptions.BusinessException;
 import com.banqmasr.platform.models.DeviceCommand;
 import com.banqmasr.platform.models.DeviceModel;
+import com.banqmasr.platform.models.DevicePlotAssignReq;
 import com.banqmasr.platform.models.DeviceReqMsg;
 import com.banqmasr.platform.repo.DeviceRepo;
 import com.banqmasr.platform.repo.PlotRepo;
@@ -84,8 +85,8 @@ public class DeviceService {
             protected Region convert(String source) {
                 if(source !=null )
                 {
-                    Region region = new Region();
-                    region.setName(source);
+
+                    Region region = new Region(source,null);
                     return region;
 
                 } else
@@ -112,4 +113,13 @@ public class DeviceService {
     public List<Device> listAll() {
         return (List<Device>) deviceRepo.findAll();
     }
+
+    public Device getDevice(String deviceId) {
+        Device device =  deviceRepo.findById(UUID.fromString(deviceId)).get();
+        if(device == null)
+            throw new BusinessException("Device with ID : " + deviceId + " is not found");
+        return device;
+    }
+
+
 }
