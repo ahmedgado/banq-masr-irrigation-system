@@ -1,4 +1,4 @@
-package com.banqmasr.platform.models;
+package org.banqmasr.models;
 
 public interface Model {
    String getId();

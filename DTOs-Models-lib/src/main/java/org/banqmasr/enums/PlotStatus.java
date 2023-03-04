@@ -1,4 +1,4 @@
-package com.banqmasr.platform.entities.enums;
+package org.banqmasr.enums;
 
 public enum PlotStatus {
     NORMAL,

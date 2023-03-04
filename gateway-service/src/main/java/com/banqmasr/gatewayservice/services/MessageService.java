@@ -2,21 +2,16 @@ package com.banqmasr.gatewayservice.services;
 
 
 import com.banqmasr.gatewayservice.entities.DeviceReqMsg;
-import com.banqmasr.gatewayservice.enums.DeviceStatus;
-import com.banqmasr.gatewayservice.exceptions.BusinessException;
 import com.banqmasr.gatewayservice.models.DeviceReqMsgModel;
 import com.banqmasr.gatewayservice.repo.DeviceReqMsgRepo;
 import com.banqmasr.gatewayservice.services.models.CommandResponse;
-import com.fasterxml.jackson.core.JsonToken;
+import org.banqmasr.enums.DeviceStatus;
+import org.banqmasr.exceptions.BusinessException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @Service

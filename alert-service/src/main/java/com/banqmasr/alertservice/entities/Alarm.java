@@ -10,7 +10,5 @@ public class Alarm {
     @Id
     private UUID id;
     @Column
-    private String deviceId;
-    @Column
     private String alarmMessage;
 }

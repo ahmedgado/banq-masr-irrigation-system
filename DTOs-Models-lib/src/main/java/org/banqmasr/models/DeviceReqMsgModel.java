@@ -1,14 +1,13 @@
-package com.banqmasr.platform.models;
+package org.banqmasr.models;
 
-import com.banqmasr.platform.entities.enums.DeviceStatus;
 import lombok.Data;
 import lombok.ToString;
-
+import org.banqmasr.enums.DeviceStatus;
 
 
 @Data
 @ToString
-public class DeviceReqMsg  implements Model {
+public class DeviceReqMsgModel implements Model {
     private String id;
     private String deviceImei;
     private Long waterLevel;

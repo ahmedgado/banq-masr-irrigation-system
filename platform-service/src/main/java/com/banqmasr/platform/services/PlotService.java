@@ -3,15 +3,16 @@ package com.banqmasr.platform.services;
 import com.banqmasr.platform.entities.Device;
 import com.banqmasr.platform.entities.Plot;
 import com.banqmasr.platform.entities.Region;
-import com.banqmasr.platform.exceptions.BusinessException;
-import com.banqmasr.platform.models.DevicePlotAssignReq;
-import com.banqmasr.platform.models.PlotModel;
 import com.banqmasr.platform.repo.PlotRepo;
 import com.banqmasr.platform.repo.RegionRepo;
+import org.banqmasr.exceptions.BusinessException;
+import org.banqmasr.models.DevicePlotAssignReqModel;
+import org.banqmasr.models.PlotModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,9 +65,9 @@ public class PlotService {
         return plot;
     }
 
-    public Plot assignDeviceToPlot(DevicePlotAssignReq devicePlotAssignReq) {
-        Device device = deviceService.getDevice(devicePlotAssignReq.getDeviceId());
-        Plot plot = getPlot(devicePlotAssignReq.getPlotId());
+    public Plot assignDeviceToPlot(DevicePlotAssignReqModel devicePlotAssignReqModel) {
+        Device device = deviceService.getDevice(devicePlotAssignReqModel.getDeviceId());
+        Plot plot = getPlot(devicePlotAssignReqModel.getPlotId());
         plot.setDevice(device);
         plotRepo.save(plot);
         return plot;
@@ -75,4 +76,5 @@ public class PlotService {
     public List<Plot> getPlots() {
         return plotRepo.findAll();
     }
+
 }

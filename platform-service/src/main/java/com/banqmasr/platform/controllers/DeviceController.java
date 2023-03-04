@@ -1,11 +1,12 @@
 package com.banqmasr.platform.controllers;
 
 import com.banqmasr.platform.entities.Device;
-import com.banqmasr.platform.exceptions.BusinessException;
 import com.banqmasr.platform.models.DeviceCommand;
-import com.banqmasr.platform.models.DeviceModel;
-import com.banqmasr.platform.models.DeviceReqMsg;
 import com.banqmasr.platform.services.DeviceService;
+import org.banqmasr.exceptions.BusinessException;
+import org.banqmasr.models.DeviceModel;
+import org.banqmasr.models.DeviceReqMsgModel;
+import org.banqmasr.models.PlotModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class DeviceController {
     }
 
     @PostMapping("/receive")
-    public DeviceCommand handleMessage (@RequestBody DeviceReqMsg msg)
+    public DeviceCommand handleMessage (@RequestBody DeviceReqMsgModel msg)
     {
         return deviceService.processReading(msg);
     }
@@ -40,5 +41,12 @@ public class DeviceController {
     {
 
         return deviceService.listAll();
+    }
+
+    @GetMapping("/inactive-devices")
+    public List<String> listOfActivePlots(@RequestParam(value = "timeInMin", required = false, defaultValue = "60") long timeInMin)
+    {
+
+        return deviceService.getInactive(timeInMin);
     }
 }

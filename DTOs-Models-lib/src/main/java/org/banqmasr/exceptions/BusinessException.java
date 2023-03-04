@@ -1,4 +1,4 @@
-package com.banqmasr.gatewayservice.exceptions;
+package org.banqmasr.exceptions;
 
 public class BusinessException extends RuntimeException{
 

@@ -1,9 +1,9 @@
-package com.banqmasr.platform.models;
+package org.banqmasr.models;
 
 import lombok.Data;
 
 @Data
-public class DevicePlotAssignReq {
+public class DevicePlotAssignReqModel {
     private String deviceId;
     private String plotId;
 }

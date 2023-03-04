@@ -5,7 +5,6 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 
 import java.util.UUID;
@@ -18,7 +17,6 @@ public class PlatformServiceApplication {
     }
 
     @Bean
-    @LoadBalanced
     public ModelMapper modelMapper() {
         ModelMapper modelToEntityDtoMapper = new ModelMapper();
         Converter<String, UUID> uuidConverter = new AbstractConverter<String, UUID>() {

@@ -3,19 +3,19 @@ package com.banqmasr.platform.services;
 import com.banqmasr.platform.entities.Device;
 import com.banqmasr.platform.entities.Plot;
 import com.banqmasr.platform.entities.Region;
-import com.banqmasr.platform.exceptions.BusinessException;
 import com.banqmasr.platform.models.DeviceCommand;
-import com.banqmasr.platform.models.DeviceModel;
-import com.banqmasr.platform.models.DevicePlotAssignReq;
-import com.banqmasr.platform.models.DeviceReqMsg;
 import com.banqmasr.platform.repo.DeviceRepo;
 import com.banqmasr.platform.repo.PlotRepo;
+import org.banqmasr.exceptions.BusinessException;
+import org.banqmasr.models.DeviceModel;
+import org.banqmasr.models.DeviceReqMsgModel;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +42,7 @@ public class DeviceService {
         return command;
     }
 
-    public DeviceCommand processReading (DeviceReqMsg msg)
+    public DeviceCommand processReading (DeviceReqMsgModel msg)
     {
         Plot plot = plotRepo.findByDeviceImei(msg.getDeviceImei());
 
@@ -111,7 +111,7 @@ public class DeviceService {
     }
 
     public List<Device> listAll() {
-        return (List<Device>) deviceRepo.findAll();
+        return  deviceRepo.findAll();
     }
 
     public Device getDevice(String deviceId) {
@@ -122,4 +122,9 @@ public class DeviceService {
     }
 
 
+    public List<String> getInactive(long timeInMin) {
+        long timeInMs = timeInMin * 60000;
+        long timeOfInactiveDiffNow = (new Date()).getTime() - timeInMs ;
+        return deviceRepo.findInActivePlots(timeOfInactiveDiffNow);
+    }
 }

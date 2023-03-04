@@ -1,6 +1,6 @@
-package com.banqmasr.platform.models;
+package org.banqmasr.models;
 
-import com.banqmasr.platform.entities.enums.DeviceStatus;
+import org.banqmasr.enums.DeviceStatus;
 import lombok.Data;
 
 @Data

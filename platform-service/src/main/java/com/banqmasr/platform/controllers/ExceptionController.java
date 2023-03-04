@@ -1,6 +1,6 @@
 package com.banqmasr.platform.controllers;
 
-import com.banqmasr.platform.exceptions.BusinessException;
+import org.banqmasr.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

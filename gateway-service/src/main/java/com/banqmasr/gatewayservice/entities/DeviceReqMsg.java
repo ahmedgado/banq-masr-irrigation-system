@@ -1,9 +1,10 @@
 package com.banqmasr.gatewayservice.entities;
 
-import com.banqmasr.gatewayservice.enums.DeviceStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.banqmasr.enums.DeviceStatus;
+
 import java.util.UUID;
 
 @Entity

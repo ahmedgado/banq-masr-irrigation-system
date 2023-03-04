@@ -1,9 +1,9 @@
 package com.banqmasr.gatewayservice.controllers;
 
-import com.banqmasr.gatewayservice.exceptions.BusinessException;
 import com.banqmasr.gatewayservice.models.DeviceReqMsgModel;
 import com.banqmasr.gatewayservice.services.MessageService;
 import com.banqmasr.gatewayservice.services.models.CommandResponse;
+import org.banqmasr.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +21,8 @@ public class DeviceController {
     not command will be N/A and duration zero
     */
     @PostMapping("/post-reading")
-    public CommandResponse saveReadFromDevice (@RequestBody DeviceReqMsgModel msg) throws BusinessException {
+    public CommandResponse saveReadFromDevice (@RequestBody DeviceReqMsgModel msg)
+            throws BusinessException {
              CommandResponse resMsg =  messageService.readDeviceMsg(msg);
              return  resMsg;
     }

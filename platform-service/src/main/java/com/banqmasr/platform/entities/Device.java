@@ -1,7 +1,8 @@
 package com.banqmasr.platform.entities;
-import com.banqmasr.platform.entities.enums.DeviceStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.banqmasr.enums.DeviceStatus;
+
 import java.util.UUID;
 
 @Entity

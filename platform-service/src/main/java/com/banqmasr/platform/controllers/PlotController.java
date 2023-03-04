@@ -1,9 +1,9 @@
 package com.banqmasr.platform.controllers;
 
 import com.banqmasr.platform.entities.Plot;
-import com.banqmasr.platform.models.DevicePlotAssignReq;
-import com.banqmasr.platform.models.PlotModel;
 import com.banqmasr.platform.services.PlotService;
+import org.banqmasr.models.DevicePlotAssignReqModel;
+import org.banqmasr.models.PlotModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +24,14 @@ public class PlotController {
     }
 
     @PostMapping("/assign-device")
-    public Plot assignDeviceToPlot (@RequestBody DevicePlotAssignReq devicePlotAssignReq)
+    public Plot assignDeviceToPlot (@RequestBody DevicePlotAssignReqModel devicePlotAssignReqModel)
     {
-       return plotService.assignDeviceToPlot(devicePlotAssignReq);
+       return plotService.assignDeviceToPlot(devicePlotAssignReqModel);
     }
     @GetMapping("/list")
     public List<Plot> listOfPlots ()
     {
         return plotService.getPlots();
     }
+
 }
