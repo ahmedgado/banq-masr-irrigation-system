@@ -11,4 +11,5 @@ public class DeviceReqMsgModel {
     private String status;
 
     private long ts;
+
 }

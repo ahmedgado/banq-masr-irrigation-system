@@ -103,4 +103,17 @@ public class MessageService {
         }
 
     }
+
+    public boolean checkDeviceOnline(String deviceImei)
+    {
+        Boolean command = restTemplate.
+                getForObject("http://localhost:8099/device-simulator/health-check", Boolean.class);
+
+        if(command!=null)
+        {
+            return command;
+        }else {
+            throw new BusinessException("Failed to send message to device Simulator");
+        }
+    }
 }
