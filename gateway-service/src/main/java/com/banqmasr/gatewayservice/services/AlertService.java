@@ -1,6 +1,8 @@
 package com.banqmasr.gatewayservice.services;
 
+import org.banqmasr.constants.ServicesURLs;
 import org.banqmasr.exceptions.BusinessException;
+import org.banqmasr.models.AlertMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,8 +14,10 @@ public class AlertService {
 
     public String createAlert (String message)
     {
+        AlertMessage alertMessage = new AlertMessage();
+        alertMessage.setMessage(message);
         String response = restTemplate.
-                getForObject("http://alert-service/alert?msg = " + message, String.class);
+                postForObject(ServicesURLs.sendAlert,alertMessage, String.class);
 
         if(response!=null)
         {

@@ -6,9 +6,10 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class Alarm {
+public class Alert {
     @Id
     private UUID id;
     @Column
-    private String alarmMessage;
+    private String alertMessage;
+
 }

@@ -5,6 +5,7 @@ import com.banqmasr.gatewayservice.entities.DeviceReqMsg;
 import com.banqmasr.gatewayservice.models.DeviceReqMsgModel;
 import com.banqmasr.gatewayservice.repo.DeviceReqMsgRepo;
 import com.banqmasr.gatewayservice.services.models.CommandResponse;
+import org.banqmasr.constants.ServicesURLs;
 import org.banqmasr.enums.DeviceStatus;
 import org.banqmasr.exceptions.BusinessException;
 import org.modelmapper.ModelMapper;
@@ -41,7 +42,7 @@ public class MessageService {
     private void checkIfDeviceRegistered(String imei)
     {
         Object object = restTemplate.
-                getForObject("http://core-service/device/search/"+imei, Object.class);
+                getForObject(ServicesURLs.checkDevice +imei, Object.class);
         if(object.equals(true))
         {
             System.out.println("Founded" + object);
@@ -66,7 +67,7 @@ public class MessageService {
     private CommandResponse sendToPlatform (DeviceReqMsg deviceMessage)
     {
         CommandResponse command = restTemplate.
-                postForObject("http://core-service/device/receive", deviceMessage, CommandResponse.class);
+                postForObject(ServicesURLs.sendDeviceMessageToPlatform, deviceMessage, CommandResponse.class);
 
         if(command!=null)
         {
@@ -106,14 +107,7 @@ public class MessageService {
 
     public boolean checkDeviceOnline(String deviceImei)
     {
-        Boolean command = restTemplate.
-                getForObject("http://localhost:8099/device-simulator/health-check", Boolean.class);
-
-        if(command!=null)
-        {
-            return command;
-        }else {
-            throw new BusinessException("Failed to send message to device Simulator");
-        }
+        // call device health check api
+        return true;
     }
 }

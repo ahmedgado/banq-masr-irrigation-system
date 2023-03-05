@@ -1,7 +1,8 @@
 package com.banqmasr.alertservice;
 
-import com.banqmasr.alertservice.entities.Alarm;
-import com.banqmasr.alertservice.repo.AlarmRepo;
+import com.banqmasr.alertservice.entities.Alert;
+import com.banqmasr.alertservice.repo.AlertRepo;
+import org.banqmasr.constants.ServicesURLs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,14 +24,14 @@ public class CheckPlot {
     private String periodPerMin;
 
     @Autowired
-    private AlarmRepo alarmRepo;
+    private AlertRepo alertRepo;
 
 
     private List<String> getInActiveDevices ()
     {
         long periodInMin = Long.parseLong(periodPerMin);
         List<String> plotModels = restTemplate.
-                getForObject("http://localhost:8080/device/inactive-devices?timeInMin=" + periodInMin, ArrayList.class);
+                getForObject(ServicesURLs.inActiveDevice + periodInMin, ArrayList.class);
 
         if(plotModels!=null)
         {
@@ -51,15 +52,15 @@ public class CheckPlot {
         System.out.println("Devices inactive count ..."+devicesImeis.size() );
 
         devicesImeis.forEach(devicesImei -> {
-            sendAlarm(devicesImei);
+            sendAlert(devicesImei);
         });
 
     }
 
-    private void sendAlarm(String deviceImei) {
-        Alarm alarm = new Alarm();
-        alarm.setId(UUID.randomUUID());
-        alarm.setAlarmMessage("Device " + deviceImei + " is inactive.");
-        alarmRepo.save(alarm);
+    private void sendAlert(String deviceImei) {
+        Alert alert = new Alert();
+        alert.setId(UUID.randomUUID());
+        alert.setAlertMessage("Device " + deviceImei + " is inactive.");
+        alertRepo.save(alert);
     }
 }
