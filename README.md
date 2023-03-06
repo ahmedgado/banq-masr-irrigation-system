@@ -1,4 +1,4 @@
-Automatic irrigation system
+Automatic irrigation system (DB is online Postgres DB service hope you run this app before trial version end . just tell me to create new one)
 
 System will send message from each device each specific period (out of scope it’s related to Device ) message will contain
 current level of water in plot and depends on plot pre-configured max water level for it and compare
