@@ -7,6 +7,7 @@ import com.banqmasr.platform.models.Constants;
 import com.banqmasr.platform.models.DeviceCommand;
 import com.banqmasr.platform.repo.DeviceRepo;
 import com.banqmasr.platform.repo.PlotRepo;
+import org.banqmasr.enums.DeviceStatus;
 import org.banqmasr.exceptions.BusinessException;
 import org.banqmasr.models.DeviceModel;
 import org.banqmasr.models.DeviceReqMsgModel;
@@ -76,6 +77,11 @@ public class DeviceService {
                 // update last time updated
                 plot.setLastTimeUpdated((new Date()).getTime());
                 plotRepo.save(plot);
+            Device device = plot.getDevice();
+            if(device.getStatus().equals(DeviceStatus.NEW)) {
+                    device.setStatus(DeviceStatus.ACTIVE);
+                    deviceRepo.save(device);
+                }
                 return createCommandForDevice(duration);
 
         }else {
@@ -132,12 +138,14 @@ public class DeviceService {
     public Device saveDevice (DeviceModel deviceModel)
     {
         validateDevice(deviceModel);
-        if(checkDeviceExistOrNot(deviceModel.getImei()))
+        if(deviceModel.getId() == null && checkDeviceExistOrNot(deviceModel.getImei()))
             throw new BusinessException("IMEI registered before");
 
        Device device = convertFromModelToEntity(deviceModel);
-       if(device.getId() == null)
-       device.setId(UUID.randomUUID());
+       if(device.getId() == null) {
+           device.setId(UUID.randomUUID());
+           device.setStatus(DeviceStatus.NEW);
+       }
        deviceRepo.save(device);
        return device;
     }

@@ -9,6 +9,8 @@ import org.banqmasr.constants.ServicesURLs;
 import org.banqmasr.enums.DeviceStatus;
 import org.banqmasr.exceptions.BusinessException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +27,9 @@ public class MessageService {
     @Autowired
     private DeviceReqMsgRepo deviceReqMsgRepo;
 
-/*
+    private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
+
+    /*
 *  Read device message validate it if valid will be stored into DB for log
 * then check if device registered to platform or not
  * if validation failed will fire exception and send it message to client
@@ -51,7 +55,7 @@ public class MessageService {
                 getForObject(ServicesURLs.checkDevice +imei, Object.class);
         if(object.equals(true))
         {
-            System.out.println("Founded" + object);
+            logger.info("Founded" + object);
         }else {
             throw new BusinessException("Device Not Found");
         }
@@ -76,6 +80,7 @@ public class MessageService {
     * */
     private CommandResponse sendToPlatform (DeviceReqMsg deviceMessage)
     {
+
         CommandResponse command = restTemplate.
                 postForObject(ServicesURLs.sendDeviceMessageToPlatform, deviceMessage, CommandResponse.class);
 

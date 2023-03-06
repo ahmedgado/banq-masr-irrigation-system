@@ -27,12 +27,13 @@ public class DeviceController {
     of water and push back command to device start work if needed with duration if
     not command will be N/A and duration zero .
     SaveReFromDevice used for validate messages from device and send it to
-    platform
+    platform. when send command back to device
     */
     @PostMapping("/post-reading")
     public CommandResponse saveReadFromDevice (@RequestBody DeviceReqMsgModel msg)
             throws BusinessException {
              CommandResponse resMsg =  messageService.readDeviceMsg(msg);
+
              for(int i=0 ; i< Integer.parseInt(checkRetry) ; i++) {
                  if (messageService.checkDeviceOnline(msg.getDeviceImei()))
                      return resMsg;

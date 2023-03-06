@@ -3,6 +3,8 @@ package com.banqmasr.alertservice;
 import com.banqmasr.alertservice.entities.Alert;
 import com.banqmasr.alertservice.repo.AlertRepo;
 import org.banqmasr.constants.ServicesURLs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +28,9 @@ public class CheckPlot {
     @Autowired
     private AlertRepo alertRepo;
 
+    private static final Logger logger = LoggerFactory.getLogger(CheckPlot.class);
+
+
 
     private List<String> getInActiveDevices ()
     {
@@ -47,9 +52,9 @@ public class CheckPlot {
     @Scheduled(fixedRateString = "${inactive.checker.PeriodPerMs}", initialDelay = 5000)
     public void execute()
     {
-        System.out.println("Start Service ...");
+        logger.info("Start Service Check Inactive ...");
         List<String> devicesImeis = getInActiveDevices();
-        System.out.println("Devices inactive count ..."+devicesImeis.size() );
+        logger.info("Devices inactive count ..."+devicesImeis.size() );
 
         devicesImeis.forEach(devicesImei -> {
             sendAlert(devicesImei);

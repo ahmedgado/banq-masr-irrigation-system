@@ -2,5 +2,7 @@ package org.banqmasr.enums;
 
 public enum DeviceStatus {
     IDLE,
-    WORKING
+    WORKING,
+    ACTIVE,
+    NEW
 }
