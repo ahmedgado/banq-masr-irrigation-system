@@ -16,18 +16,32 @@ public class PlotController {
     @Autowired
     private PlotService plotService;
 
-
+/*
+* save new plot or update data of plot into DB
+*
+* */
     @PostMapping("/save")
     public Plot savePlot (@RequestBody PlotModel plotModel)
     {
         return plotService.savePlot(plotModel);
     }
 
+    /*
+    * used to assign device to plot
+    * by send both ids of them
+    * */
+
     @PostMapping("/assign-device")
     public Plot assignDeviceToPlot (@RequestBody DevicePlotAssignReqModel devicePlotAssignReqModel)
     {
        return plotService.assignDeviceToPlot(devicePlotAssignReqModel);
     }
+
+    /*
+    * list of all plots from DB
+    *
+    * */
+
     @GetMapping("/list")
     public List<Plot> listOfPlots ()
     {

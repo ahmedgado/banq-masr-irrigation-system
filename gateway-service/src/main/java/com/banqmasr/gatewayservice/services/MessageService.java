@@ -25,20 +25,26 @@ public class MessageService {
     @Autowired
     private DeviceReqMsgRepo deviceReqMsgRepo;
 
+/*
+*  Read device message validate it if valid will be stored into DB for log
+* then check if device registered to platform or not
+ * if validation failed will fire exception and send it message to client
+* */
 
     public CommandResponse readDeviceMsg (DeviceReqMsgModel msg) throws BusinessException
     {
-        // Validate
-            validateDeviceMsg(msg);
-        // save
+        validateDeviceMsg(msg);
         DeviceReqMsg deviceMessage = saveDeviceMsg(msg);
-        //Check Device
         checkIfDeviceRegistered(msg.getDeviceImei());
-
         return sendToPlatform(deviceMessage);
 
     }
 
+    /*
+    * Call Core Service to check Device status
+    *
+    *
+    * */
     private void checkIfDeviceRegistered(String imei)
     {
         Object object = restTemplate.
@@ -50,6 +56,10 @@ public class MessageService {
             throw new BusinessException("Device Not Found");
         }
     }
+/*
+* Save Device Message to DB
+*
+* */
 
     private DeviceReqMsg saveDeviceMsg (DeviceReqMsgModel msg)
     {
@@ -78,18 +88,24 @@ public class MessageService {
 
     }
 
+    /*
+    * Validate if Message contain IMEI , STATUS MUST BE IDLE OR WORKING
+    * if IDLE must contain waterLevel
+    * if validation failed will fire exception and send it message to client
+    * */
+
     private void validateDeviceMsg (DeviceReqMsgModel msg) throws BusinessException
     {
         if (msg.getDeviceImei() != null && !msg.getDeviceImei().isEmpty()) {
 
             if (msg.getStatus() != null && (msg.getStatus().toUpperCase()
-                    .equals(DeviceStatus.valueOf("IDLE").name().toUpperCase()) ||
+                    .equals(DeviceStatus.valueOf(DeviceStatus.IDLE.name()).name().toUpperCase()) ||
                     msg.getStatus().toUpperCase()
-                            .equals(DeviceStatus.valueOf("WORKING").name().toUpperCase()))
+                            .equals(DeviceStatus.valueOf(DeviceStatus.WORKING.name()).name().toUpperCase()))
                     && msg.getTs() > 0) {
 
                 if(!(msg.getStatus().toUpperCase()
-                        .equals(DeviceStatus.valueOf("IDLE").name().toUpperCase()) &&
+                        .equals(DeviceStatus.valueOf(DeviceStatus.IDLE.name()).name().toUpperCase()) &&
                                 msg.getWaterLevel() > 0 ))
                 {
                     throw new BusinessException("WATER_LEVEL_MISSED");
@@ -107,7 +123,7 @@ public class MessageService {
 
     public boolean checkDeviceOnline(String deviceImei)
     {
-        // call device health check api
+        // call device health check api Device Side
         return true;
     }
 }

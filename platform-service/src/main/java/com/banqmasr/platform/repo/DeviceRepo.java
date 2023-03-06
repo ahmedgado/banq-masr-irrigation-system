@@ -16,5 +16,5 @@ public interface DeviceRepo extends JpaRepository<Device, UUID> {
 
 
     @Query(value = "select imei from device where id in (select device_id from plot  where last_time_updated < ? and last_time_updated is not null)",nativeQuery = true)
-    List<String> findInActivePlots(@Param("ts") long timeInMs);
+    List<String> findInActiveDevices(@Param("ts") long timeInMs);
 }

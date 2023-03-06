@@ -18,6 +18,10 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
+    /* Check if device Imei stored before into DB or not
+    *
+    */
+
     @GetMapping("/search/{imei}")
     public Boolean checkIfDeviceExist (@PathVariable String imei)
     {
@@ -25,11 +29,18 @@ public class DeviceController {
         return deviceService.checkDeviceExistOrNot(imei);
     }
 
+    /*
+    handle device message work flow
+    *
+    * */
     @PostMapping("/receive")
     public DeviceCommand handleMessage (@RequestBody DeviceReqMsgModel msg)
     {
         return deviceService.processReading(msg);
     }
+    /*
+    * save new Device or update it's data
+    * */
     @PostMapping("/save")
     public Device saveDevice (@RequestBody DeviceModel deviceModel) throws BusinessException
     {

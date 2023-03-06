@@ -3,6 +3,7 @@ package com.banqmasr.platform.services;
 import com.banqmasr.platform.entities.Device;
 import com.banqmasr.platform.entities.Plot;
 import com.banqmasr.platform.entities.Region;
+import com.banqmasr.platform.models.Constants;
 import com.banqmasr.platform.models.DeviceCommand;
 import com.banqmasr.platform.repo.DeviceRepo;
 import com.banqmasr.platform.repo.PlotRepo;
@@ -36,12 +37,22 @@ public class DeviceService {
       return  deviceRepo.existsByImei(imei);
     }
 
+    /*
+    *
+    * */
+
     private DeviceCommand createCommandForDevice (long duration)
     {
-        DeviceCommand command = new DeviceCommand("SEED",duration);
+        DeviceCommand command = new DeviceCommand(Constants.SEED_COMMAND,duration);
         return command;
     }
-
+/*
+* Read Message and process it get device from DB by it's Imei
+* then get assigned Plot to it
+* get plot pre-configured max water level for it and compare it to current
+* water level from message by device pre-stored speed of seeding this method
+* will calculate duration which is needed to get plot max level of water
+* */
     public DeviceCommand processReading (DeviceReqMsgModel msg)
     {
         Plot plot = plotRepo.findByDeviceImei(msg.getDeviceImei());
@@ -54,13 +65,17 @@ public class DeviceService {
 
         if(msg.getWaterLevel() < plot.getMaxWaterLevel())
         {
-            //save Plot attribute in IOT style
+            /*save Plot attribute in IOT style with water level and time stamp in
+            DB maybe bigdata
+            */
 
+            //calculate duration of seeding
 
-            // Plot need to seed
-                //calculate duration
                 long remainingLevel = plot.getMaxWaterLevel() - msg.getWaterLevel();
                 long duration = remainingLevel / plot.getDevice().getWaterLevelPerMin();
+                // update last time updated
+                plot.setLastTimeUpdated((new Date()).getTime());
+                plotRepo.save(plot);
                 return createCommandForDevice(duration);
 
         }else {
@@ -69,6 +84,11 @@ public class DeviceService {
 
     }
 
+    /*
+    *
+    * validate new or update device data before save it
+    *
+    * */
     private void validateDevice (DeviceModel deviceModel) throws BusinessException
     {
         if (deviceModel.getImei() == null || deviceModel.getImei().isEmpty())
@@ -78,7 +98,9 @@ public class DeviceService {
         if (deviceModel.getWaterLevelPerMin() == 0)
             throw new BusinessException("Water/Min is mandatory");
     }
-
+/*
+* use model maaper to clone object from model DTO to entity
+* */
     private Device convertFromModelToEntity (DeviceModel deviceModel)
     {
         Converter<String, Region> regionConverter = new AbstractConverter<String, Region>() {
@@ -100,9 +122,19 @@ public class DeviceService {
         return device;
 
     }
+
+    /*
+    * validate device data
+    * check if Imei saved before or not
+    * if imei was found it will fire exception
+    * */
+
     public Device saveDevice (DeviceModel deviceModel)
     {
         validateDevice(deviceModel);
+        if(checkDeviceExistOrNot(deviceModel.getImei()))
+            throw new BusinessException("IMEI registered before");
+
        Device device = convertFromModelToEntity(deviceModel);
        if(device.getId() == null)
        device.setId(UUID.randomUUID());
@@ -110,10 +142,17 @@ public class DeviceService {
        return device;
     }
 
+    /*
+    * return all devices into DB
+     */
     public List<Device> listAll() {
         return  deviceRepo.findAll();
     }
 
+    /*
+    * return Device stored data
+    *
+    * */
     public Device getDevice(String deviceId) {
         Device device =  deviceRepo.findById(UUID.fromString(deviceId)).get();
         if(device == null)
@@ -121,10 +160,14 @@ public class DeviceService {
         return device;
     }
 
-
+/*
+* get Inactive device which didn't
+* send data for specific period of time
+*
+* */
     public List<String> getInactive(long timeInMin) {
         long timeInMs = timeInMin * 60000;
         long timeOfInactiveDiffNow = (new Date()).getTime() - timeInMs ;
-        return deviceRepo.findInActivePlots(timeOfInactiveDiffNow);
+        return deviceRepo.findInActiveDevices(timeOfInactiveDiffNow);
     }
 }

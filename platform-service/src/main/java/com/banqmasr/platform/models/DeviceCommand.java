@@ -17,6 +17,6 @@ public class DeviceCommand {
 
     public static DeviceCommand getEmptyCommand ()
     {
-        return new DeviceCommand("N/A" , 0);
+        return new DeviceCommand(Constants.DONothing , 0);
     }
 }

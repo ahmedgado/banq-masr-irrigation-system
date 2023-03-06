@@ -1,4 +1,4 @@
-package com.banqmasr.platform;
+package com.banqmasr.gatewayservice;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -13,12 +13,9 @@ public class SpringDocConfig {
     public OpenAPI baseOpenAPI() {
 
         return new OpenAPI()
-                .info(new Info().title("Core Service")
-                        .version("1.0.0").description("Core is a " +
+                .info(new Info().title("Gateway Service")
+                        .version("1.0.0").description("Gateway is a " +
                                 "service which is responsible for receive " +
-                                "messages from each device and " +
-                                "generate command for it to work ," +
-                                " manage devices and plots data"));
-
+                                "messages from all devices"));
     }
 }
