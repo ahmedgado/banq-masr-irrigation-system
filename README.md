@@ -156,8 +156,13 @@ If Response is N/A duration Zero device won’t do anything
 Alert Service :-
 
 Scheduled service run each one min (Configurable from properties file) to check not
-updated plot to get offline alert and save it into DB like screenshot below to use it in
+updated plot to get offline alert and save it into DB like example from this query on irrigation-alert schema to use it in
 mail service or something like that in real app.
 
+SELECT * FROM public.alert
+
+Result :
+"ID"					"alert_message"
+"1578b6bd-abe8-4976-86dc-ed1fbb5958eb"	"Device 1234202020 is inactive."
 
 
